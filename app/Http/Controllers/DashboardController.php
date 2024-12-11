@@ -10,12 +10,12 @@ class DashboardController extends Controller
 {
     public function getStatusChartData()
 {
-    $statusData = DB::table('registries')
+    $statusData = DB::table('mt_messages')
         ->select(
             DB::raw('EXTRACT(MONTH FROM created_at) as month'),
-            DB::raw('COUNT(CASE WHEN status = \'pending\' THEN 1 END) as pending_count'),
-            DB::raw('COUNT(CASE WHEN status = \'valide\' THEN 1 END) as valide_count'),
-            DB::raw('COUNT(CASE WHEN status = \'close\' THEN 1 END) as close_count')
+            DB::raw('COUNT(CASE WHEN status = \'ESME_ROK\' THEN 1 END) as pending_count'),
+            DB::raw('COUNT(CASE WHEN status = \'DELIVRD\' THEN 1 END) as valide_count'),
+            DB::raw('COUNT(CASE WHEN status = \'UNDELIV\' THEN 1 END) as close_count')
         )
         ->whereYear('created_at', Carbon::now()->year)
         ->groupByRaw('EXTRACT(MONTH FROM created_at)')
@@ -56,26 +56,40 @@ class DashboardController extends Controller
 {
 
     
-    $statusCounts = registries::select('status', DB::raw('count(*) as count'))
+    $statusCounts = DB::table('mt_messages')
+        ->selectRaw('status, COUNT(*) as count')
         ->groupBy('status')
         ->pluck('count', 'status')
         ->toArray();
 
     return response()->json([
-        'pending' => $statusCounts['pending'] ?? 0,
-        'valide' => $statusCounts['valide'] ?? 0,
-        'close' => $statusCounts['close'] ?? 0
+        'pending' => $statusCounts['ESME_ROK'] ?? 0,
+        'valide' => $statusCounts['DELIVRD'] ?? 0,
+        'close' => $statusCounts['UNDELIV'] ?? 0
     ]);
 }
 
 public function getStatusStatistics()
 {
-    $sender = registries::orderBy('created_at', 'desc')->take(5)->get(['created_at', 'name', 'country', 'status', 'date_sub']);
+    // $sender = registries::orderBy('created_at', 'desc')->take(5)->get(['created_at', 'name', 'country', 'status', 'date_sub']);
+    $sender = DB::table('mt_messages')
+    ->join('networks', 'mt_messages.network', '=', 'networks.network_id') // Jointure entre mt_messages et networks
+    ->select([
+        'mt_messages.created_at',
+        'mt_messages.source_addr',
+        'mt_messages.sent_at',
+
+        'mt_messages.status',
+        'networks.network_name' // Colonne provenant de la table networks
+    ])
+    ->orderBy('mt_messages.created_at', 'desc') // Tri par date de création décroissante
+    ->take(5) // Limiter à 5 résultats
+    ->get();
     // Calculer le nombre total de senders
-    $totalSenders = DB::table('registries')->count();
+    $totalSenders = DB::table('mt_messages')->count();
     
     // Calculer les statistiques par statut
-    $statusStats = DB::table('registries')
+    $statusStats = DB::table('mt_messages')
     ->selectRaw('status, COUNT(*) as count')
     ->groupBy('status')
     ->pluck('count', 'status')
@@ -88,16 +102,16 @@ public function getStatusStatistics()
             'percentage' => 100
         ],
         'pending' => [
-            'count' => $statusStats['pending'] ?? 0,
-            'percentage' => round(($statusStats['pending'] ?? 0) / $totalSenders * 100, 2)
+            'count' => $statusStats['ESME_ROK'] ?? 0,
+            'percentage' => round(($statusStats['ESME_ROK'] ?? 0) / $totalSenders * 100, 2)
         ],
         'valide' => [
-            'count' => $statusStats['valide'] ?? 0,
-            'percentage' => round(($statusStats['valide'] ?? 0) / $totalSenders * 100, 2)
+            'count' => $statusStats['DELIVRD'] ?? 0,
+            'percentage' => round(($statusStats['DELIVRD'] ?? 0) / $totalSenders * 100, 2)
         ],
         'close' => [
-            'count' => $statusStats['close'] ?? 0,
-            'percentage' => round(($statusStats['close'] ?? 0) / $totalSenders * 100, 2)
+            'count' => $statusStats['UNDELIV'] ?? 0,
+            'percentage' => round(($statusStats['UNDELIV'] ?? 0) / $totalSenders * 100, 2)
         ]
     ];
 

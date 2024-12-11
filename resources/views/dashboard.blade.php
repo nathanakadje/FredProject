@@ -106,9 +106,10 @@
           <tbody>
           @forelse ($sender as $senders)
           <tr>
-              <td>{{ $senders->created_at->format('d/m/Y H:i') }}</td>
-              <td>{{ $senders->name }}</td>
-              <td>{{ $senders->country }}</td>
+              
+              <td>{{ \Carbon\Carbon::parse($senders->created_at)->format('d/m/Y H:i') }}</td>
+              <td>{{ $senders->source_addr }}</td>
+              <td>{{ $senders->network_name }}</td>
               <td>
                   @switch($senders->status)
                       @case('close')
@@ -121,7 +122,7 @@
                           <span class="badge bg-success ">{{ $senders->status }}</span>
                   @endswitch
               </td>
-              <td>{{ \Carbon\Carbon::parse($senders->date_sub)->format('d/m/Y') }}</td>
+              <td>{{ \Carbon\Carbon::parse($senders->sent_at)->format('d/m/Y') }}</td>
           </tr>
           @empty
           <tr>

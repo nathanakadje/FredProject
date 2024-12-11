@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
 							fill: true,
 						},
 						{
-							label: 'Valide',
+							label: 'Delivrés',
 							data: data.valide,
 							borderColor: 'rgba(54, 162, 235, 1)',
 							backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
 							fill: true,
 						},
 						{
-							label: 'Close',
+							label: 'Echoués',
 							data: data.close,
 							borderColor: 'rgba(255, 206, 86, 1)',
 							backgroundColor: 'rgba(255, 206, 86, 0.2)',
