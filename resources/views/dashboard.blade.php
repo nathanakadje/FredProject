@@ -12,7 +12,7 @@
                 <div class="progress w3-light" style="height:3px;">
                     <div class="progress-bar w3-info" style="width:100%;height:3px;"></div>
                 </div>
-                <p>Total Senders <span class="w3-right">100%</span></p>
+                <p>Total envoyé <span class="w3-right"></span></p>
             </div>
           </div>
           <div class="w3-col l3 w3-container w3-border-right">
@@ -97,10 +97,10 @@
           <thead class="table-white">
             <tr>
               <th>Create_at</th>
-              <th>Name</th>
-              <th>Country</th>
+              <th>Sender</th>
+              <th>Numero</th>
+              <th>Network</th>
               <th>Status</th>
-              <th>Submission Date</th>
             </tr>
           </thead>
           <tbody>
@@ -109,6 +109,7 @@
               
               <td>{{ \Carbon\Carbon::parse($senders->created_at)->format('d/m/Y H:i') }}</td>
               <td>{{ $senders->source_addr }}</td>
+              <td>{{ $senders->destination_addr }}</td>
               <td>{{ $senders->network_name }}</td>
               <td>
                   @switch($senders->status)
@@ -122,7 +123,7 @@
                           <span class="badge bg-success ">{{ $senders->status }}</span>
                   @endswitch
               </td>
-              <td>{{ \Carbon\Carbon::parse($senders->sent_at)->format('d/m/Y') }}</td>
+              
           </tr>
           @empty
           <tr>

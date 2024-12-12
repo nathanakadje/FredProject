@@ -77,10 +77,10 @@ public function getStatusStatistics()
     ->select([
         'mt_messages.created_at',
         'mt_messages.source_addr',
-        'mt_messages.sent_at',
+        'mt_messages.destination_addr',
 
+        'networks.network_name', // Colonne provenant de la table networks
         'mt_messages.status',
-        'networks.network_name' // Colonne provenant de la table networks
     ])
     ->orderBy('mt_messages.created_at', 'desc') // Tri par date de création décroissante
     ->take(5) // Limiter à 5 résultats

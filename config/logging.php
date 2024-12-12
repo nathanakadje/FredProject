@@ -57,6 +57,11 @@ return [
             'channels' => ['single'],
             'ignore_exceptions' => false,
         ],
+        'sms_received' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/sms_received.log'),
+            'level' => 'info',
+        ],
 
         'single' => [
             'driver' => 'single',

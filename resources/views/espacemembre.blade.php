@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  
   <title>W3Admin Dashboard - Free Dashboard for HTML5/w3css by W3MIX</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -79,15 +80,17 @@
         {{-- <a href="./accueil/profile.html" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
           <i class="fa fa-fw fa-user-circle"></i>&nbsp; Profile </a>
         <a href="./accueil/login.html" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
-          <i class="fa fa-fw fa-lock"></i>&nbsp; Login </a>
-        <a href="./accueil/register.html" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
-          <i class="fa fa-fw fa-sign-in"></i>&nbsp; Registration </a> --}}
+          <i class="fa fa-fw fa-lock"></i>&nbsp; Login </a>--}}
+    <a href="{{ route('sms.index')}}" class="w3-bar-item w3-button w3-padding-large w3-hover-text-primary">
+          <i class="fa fa-fw fa-sign-in"></i>&nbsp; Send SMS </a> 
+           
       </div>
     </nav>
   @yield('dashboard')
   @yield('formulaire')
   @yield('search')
   @yield('actions')
+  @yield('sendsms')
   <script type="text/javascript" src="https://smsrouter.letexto.com/js/prismjs.bundle.js"></script>
     <script type="text/javascript" src="https://smsrouter.letexto.com/js/popper.min.js"></script>
     <script type="text/javascript" src="https://smsrouter.letexto.com/js/scripts.bundle.js"></script>

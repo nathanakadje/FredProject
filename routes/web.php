@@ -4,7 +4,7 @@ use App\Http\Controllers\ActionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SearchController;
-
+use App\Http\Controllers\SMSController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -69,3 +69,12 @@ Route::get('/get-status-statistics', [DashboardController::class, 'getStatusStat
 // Route::get('/dashboard', [DashboardController::class, 'dashboard']);
 Route::get('/dashboard', [DashboardController::class, 'getStatusStatistics']);
 Route::get('/status-chart-data', [DashboardController::class, 'getStatusChartData']);
+
+// -------------------------------------------------------------------------------------------------------------
+
+Route::get('/send-sms', [SMSController::class, 'index'])->name('sms.index');
+Route::post('/send-sms', [SMSController::class, 'sendMessage'])->name('sms.send');
+Route::match(['get', 'post'], '/receive-sms/mo.php', [SMSController::class, 'receiveSMS'])->name('sms.receive');
+
+Route::get('/', [SMSController::class, 'index'])->name('sms.index');
+Route::post('/send', [SMSController::class, 'sendMessage'])->name('sms.send');
